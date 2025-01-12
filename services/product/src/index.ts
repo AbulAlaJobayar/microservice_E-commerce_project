@@ -19,9 +19,9 @@ app.use(morgan("dotenv"));
 app.get("/test", (_req, res) => {
   res.status(200).json("up");
 });
-app.get("/product/:id", getProductDetailsFromDB);
+app.get("/products/:id", getProductDetailsFromDB);
 app.get("/products", getAllProductsFromDB);
-app.post("/product", createProduct);
+app.post("/products", createProduct);
 
 // Not found
 app.use((_req, res) => {

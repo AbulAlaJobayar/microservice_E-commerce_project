@@ -8,14 +8,19 @@ import sendResponse from "../shared/sendResponse";
 
 const getProductDetailsFromDB = catchAsync(
   async (req: Request, res: Response) => {
+    
     const { id } = req.params;
+    console.log(id)
     //find product
     const product = await prisma.product.findUnique({
       where: { id },
     });
+
     if (!product) {
       throw new AppError(404, "Product not found");
     }
+    console.log(product)
+
     if (product.inventoryId === null) {
       const { data: inventory } = await axios.post(
         `${INVENTORY_URL}/inventory`,
@@ -30,9 +35,17 @@ const getProductDetailsFromDB = catchAsync(
         data: { inventoryId: product.id },
       });
     }
-    const { data: inventory } = await axios.get(
-      `${INVENTORY_URL}/inventory/${product.inventoryId}`
-    );
+
+console.log( `${INVENTORY_URL}/inventory/${product.inventoryId}`)
+
+   if (!product.inventoryId) {
+  throw new Error("Invalid inventoryId: cannot fetch inventory details");
+}
+console.log(product.inventoryId)
+const { data: inventory } = await axios.get(
+  `${INVENTORY_URL}/inventory/${product.inventoryId}`
+);
+console.log("inventory",inventory)
     sendResponse(res, {
       status: 200,
       success: true,
