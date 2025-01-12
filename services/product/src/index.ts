@@ -2,7 +2,11 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
-import {createInventory, getInventoryDetailsFromDB, getInventoryFromDB, updatedInventory} from './controllers'
+import {
+  createProduct,
+  getAllProductsFromDB,
+  getProductDetailsFromDB,
+} from "./controllers";
 
 dotenv.config();
 const app = express();
@@ -15,11 +19,9 @@ app.use(morgan("dotenv"));
 app.get("/test", (_req, res) => {
   res.status(200).json("up");
 });
-app.get("/inventory/:id/details",getInventoryDetailsFromDB)
-app.get("/inventory/:id", getInventoryFromDB)
-app.put("/inventories/:id",updatedInventory)
-app.post("/inventory",createInventory)
-
+app.get("/product/:id", getProductDetailsFromDB);
+app.get("/products", getAllProductsFromDB);
+app.post("/product", createProduct);
 
 // Not found
 app.use((_req, res) => {
@@ -31,8 +33,8 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ Message: "Something broke!" });
 });
 
-const port = process.env.PORT || 4002;
-const servicesName = process.env.SERVICES_NAME || "inventory Services";
+const port = process.env.PORT || 4001;
+const servicesName = process.env.SERVICES_NAME || "Product Services";
 app.listen(port, () => {
   console.log(`${servicesName} listening on ${port}`);
 });

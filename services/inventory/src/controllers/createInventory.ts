@@ -3,7 +3,6 @@ import catchAsync from "../shared/catchAsync";
 import { InventorySchema } from "../schema";
 import AppError from "../shared/AppError";
 import prisma from "../shared/prisma";
-
 import sendResponse from "../shared/sendResponse";
 
 const createInventory = catchAsync(async (req: Request, res: Response) => {
