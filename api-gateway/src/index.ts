@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
+import { configureRoute } from "./utls";
 
 dotenv.config();
 const app = express();
@@ -32,6 +33,11 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // auth route
+
+
+// route
+configureRoute(app)
+
 app.get("/health", (req, res) => {
   res.json({ message: "up" });
 });
