@@ -6,10 +6,19 @@ import axios from "axios";
 const createHandler = (hostName: string, path: string, method: string) => {
   return async (req: Request, res: Response) => {
     try {
+      let url = `${hostName}${path}`;
+      req.params &&
+        Object.keys(req.params).forEach((params) => {
+          url.replace(`:${params}`, req.params[params]);
+        });
+
       const { data } = await axios({
         method,
-        url: `${hostName}${path}`,
+        url,
         data: req.body,
+        headers:{
+          origin: "http://localhost:8081"
+        }
       });
       res.json(data);
     } catch (error) {
@@ -22,7 +31,7 @@ const createHandler = (hostName: string, path: string, method: string) => {
     }
   };
 };
-export const configureRoute = (app:any) => {
+export const configureRoute = (app: any) => {
   Object.entries(config.services).forEach(([name, service]) => {
     const hostName = service.url;
 

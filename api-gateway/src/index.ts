@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
-import { configureRoute } from "./utls";
+import { configureRoute } from "./utils";
 
 dotenv.config();
 const app = express();
@@ -41,7 +41,10 @@ configureRoute(app)
 app.get("/health", (req, res) => {
   res.json({ message: "up" });
 });
-
+ //404 not found
+ app.use((req: Request, res: Response) => {
+  res.status(404).json({ message: "Not Found" });
+});
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(err.stack);
   res.status(500).json({

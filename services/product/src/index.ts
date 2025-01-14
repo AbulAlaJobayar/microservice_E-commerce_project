@@ -19,6 +19,17 @@ app.use(morgan("dotenv"));
 app.get("/test", (_req, res) => {
   res.status(200).json("up");
 });
+app.use((req, res, next) => {
+  const allowedOrigin = ["http://localhost:8081", "https://127.0.0.1:8081"];
+  const origin = req.headers.origin || "";
+  if (allowedOrigin.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    next();
+  } else {
+    res.status(403).json("Forbidden");
+  }
+});
+
 app.get("/products/:id", getProductDetailsFromDB);
 app.get("/products", getAllProductsFromDB);
 app.post("/products", createProduct);

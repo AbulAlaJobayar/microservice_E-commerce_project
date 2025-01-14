@@ -2,7 +2,12 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
-import {createInventory, getInventoryDetailsFromDB, getInventoryFromDB, updatedInventory} from './controllers'
+import {
+  createInventory,
+  getInventoryDetailsFromDB,
+  getInventoryFromDB,
+  updatedInventory,
+} from "./controllers";
 
 dotenv.config();
 const app = express();
@@ -15,11 +20,21 @@ app.use(morgan("dotenv"));
 app.get("/test", (_req, res) => {
   res.status(200).json("up");
 });
-app.get("/inventory/:id/details",getInventoryDetailsFromDB)
-app.get("/inventory/:id", getInventoryFromDB)
-app.put("/inventories/:id",updatedInventory)
-app.post("/inventory",createInventory)
+app.use((req, res, next) => {
+  const allowedOrigin = ["http://localhost:8081", "https://127.0.0.1:8081"];
+  const origin = req.headers.origin || "";
+  if (allowedOrigin.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    next();
+  } else {
+    res.status(403).json("Forbidden");
+  }
+});
 
+app.get("/inventory/:id/details", getInventoryDetailsFromDB);
+app.get("/inventory/:id", getInventoryFromDB);
+app.put("/inventories/:id", updatedInventory);
+app.post("/inventory", createInventory);
 
 // Not found
 app.use((_req, res) => {
