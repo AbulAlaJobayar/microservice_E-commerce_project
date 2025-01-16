@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+import { createUser, getUserById } from "./controllers";
 
 
 dotenv.config();
@@ -26,9 +27,9 @@ app.get("/test", (_req, res) => {
 //   }
 // });
 
-// app.get("/products/:id", getProductDetailsFromDB);
+app.get("/users/:id", getUserById);
 // app.get("/products", getAllProductsFromDB);
-// app.post("/products", createProduct);
+app.post("/users", createUser);
 
 // Not found
 app.use((_req, res) => {

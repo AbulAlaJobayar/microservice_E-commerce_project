@@ -5,6 +5,7 @@ import AppError from "../shared/AppError";
 import prisma from "../shared/prisma";
 import sendResponse from "../shared/sendResponse";
 
+
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const parseBody = userSchema.createUserSchema.safeParse(req.body);
   if (!parseBody.success) {
@@ -27,3 +28,4 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
     data: user,
   });
 });
+export default createUser
