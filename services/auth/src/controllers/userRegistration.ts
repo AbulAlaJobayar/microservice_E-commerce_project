@@ -53,3 +53,4 @@ const userRegistration = catchAsync(async (req: Request, res: Response) => {
     data: user,
   });
 });
+export default  userRegistration
