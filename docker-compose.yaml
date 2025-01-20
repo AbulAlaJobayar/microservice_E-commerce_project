@@ -32,8 +32,18 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: on-failure
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    volumes:
+      - mailhog_data:/var/lib/mailhog
+
 volumes:
   postgres_data:
   pgadmin_data:
-
+  mailhog_data:
 

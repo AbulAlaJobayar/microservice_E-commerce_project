@@ -7,6 +7,14 @@ import bcrypt from "bcrypt";
 import axios from "axios";
 import sendResponse from "../shared/sendResponse";
 
+const generateVerificationCode = () => {
+  const timeStamp = new Date().getTime().toString() as any;
+  const random = Math.floor(10 + Math.random() * 90);
+  const code = (timeStamp - random).toString().slice(-5);
+
+  return code;
+};
+
 const userRegistration = catchAsync(async (req: Request, res: Response) => {
   const parseBody = createUserSchema.safeParse(req.body);
   if (!parseBody.success) {
@@ -44,13 +52,29 @@ const userRegistration = catchAsync(async (req: Request, res: Response) => {
     name: user.name,
     email: user.email,
   });
-  // todo: generate verification code
+  // generate verification code
+  const code = generateVerificationCode();
+  await prisma.verificationCode.create({
+    data: {
+      userId: user.id,
+      code: code,
+      expireAt: new Date(Date.now() + 24 * 60 * 1000), //10 minutes expiration time
+      verifiedAt: '',
+    },
+  });
+
   //todo: send verification email
+  await axios.post(`${process.env.EMAIL_PROFILE}/emails/send`, {
+    recipient: user.email,
+    subject: "Email Verification",
+    body: `Your verification code is ${code}`,
+    source: "user-registration",
+  });
   sendResponse(res, {
     status: 201,
     success: true,
-    message: "user created successfully",
+    message: "user created successfully check your email",
     data: user,
   });
 });
-export default  userRegistration
+export default userRegistration;

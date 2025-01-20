@@ -5,11 +5,13 @@
       "routes": [
         {
           "path": "/products",
-          "methods": ["get", "post"]
+          "methods": ["get", "post"],
+          "middleware": ["auth"]
         },
         {
           "path": "/products/:id",
-          "methods": ["get", "put", "delete"]
+          "methods": ["get", "put", "delete"],
+          "middleware": []
         }
       ]
     },
@@ -19,11 +21,48 @@
       "routes": [
         {
           "path": "/inventories/:id",
-          "methods": ["put"]
+          "methods": ["put"],
+          "middleware": ["auth"]
         },
         {
           "path": "/inventory/:id/details",
-          "methods": ["get"]
+          "methods": ["get"],
+          "middleware": ["auth"]
+        }
+      ]
+    },
+    "auth": {
+      "url": "http://localhost:4003",
+      "routes": [
+        {
+          "path": "/auth/register",
+          "methods": ["post"],
+          "middleware": []
+        },
+        {
+          "path": "/auth/login",
+          "methods": ["post"],
+          "middleware": []
+        },
+        {
+          "path": "/auth/verify-email",
+          "methods": ["post"],
+          "middleware": []
+        },
+        {
+          "path": "/auth/verify-token",
+          "methods": ["post"],
+          "middleware": []
+        }
+      ]
+    },
+    "user": {
+      "url": "http://localhost:4004",
+      "routes": [
+        {
+          "path": "/users/:id",
+          "methods": ["get"],
+          "middleware": ["auth"]
         }
       ]
     }

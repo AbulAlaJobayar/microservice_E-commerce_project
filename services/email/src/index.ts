@@ -2,7 +2,8 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
-import { login, userRegistration, verifyToken } from "./controllers";
+import { getEmail, sendEmail } from "./controllers";
+
 
 
 
@@ -17,21 +18,20 @@ app.use(morgan("dotenv"));
 app.get("/test", (_req, res) => {
   res.status(200).json("up");
 });
-app.use((req, res, next) => {
-  const allowedOrigin = ["http://localhost:8081", "https://127.0.0.1:8081"];
-  const origin = req.headers.origin || "";
-  if (allowedOrigin.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    next();
-  } else {
-    res.status(403).json("Forbidden");
-  }
-});
+// app.use((req, res, next) => {
+//   const allowedOrigin = ["http://localhost:8081", "https://127.0.0.1:8081"];
+//   const origin = req.headers.origin || "";
+//   if (allowedOrigin.includes(origin)) {
+//     res.setHeader("Access-Control-Allow-Origin", origin);
+//     next();
+//   } else {
+//     res.status(403).json("Forbidden");
+//   }
+// });
 
-app.post("/auth/registration",userRegistration);
-app.post("/auth/login",login);
-app.post("/auth/verify_token",verifyToken);
-app.post("/auth/verifyEmail")
+app.post("/emails/send",sendEmail);
+app.get("/emails",getEmail);
+
 
 // Not found
 app.use((_req, res) => {
